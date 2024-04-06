@@ -30,9 +30,8 @@ public class CandidateControllerTest {
         final HttpHeaders headers = new HttpHeaders();
         when(candidateService.getCandidateAverage(12L)).thenReturn(13.32);
 
-
         //WHEN
-        ResponseEntity<Double> response = testRestTemplate.exchange("/api/candidates/12L/average", HttpMethod.GET, new HttpEntity<>(null, headers), Double.class);
+        ResponseEntity<Double> response = testRestTemplate.exchange("/api/candidates/12/average", HttpMethod.GET, new HttpEntity<>(null, headers), Double.class);
 
         //THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -48,7 +47,7 @@ public class CandidateControllerTest {
 
 
         //WHEN
-        ResponseEntity<CandidateNotFoundRestException> response = testRestTemplate.exchange("/api/candidates/13L/average", HttpMethod.GET, new HttpEntity<>(null, headers), CandidateNotFoundRestException.class);
+        ResponseEntity<CandidateNotFoundRestException> response = testRestTemplate.exchange("/api/candidates/13/average", HttpMethod.GET, new HttpEntity<>(null, headers), CandidateNotFoundRestException.class);
 
         //THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
