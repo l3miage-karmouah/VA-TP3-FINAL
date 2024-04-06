@@ -52,5 +52,7 @@ public class CandidateComponentTest {
             assertThat(candidateComponent.getCandidatById(12L).getId()).isEqualTo(12L);
         });
 
+
+
     }
 }
