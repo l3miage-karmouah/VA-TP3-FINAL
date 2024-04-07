@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public interface SessionEndpoints {
 
     @Operation(description = "Créer une session")
-    @ApiResponse(responseCode = "201",description = "La session à bien été créer")
-    @ApiResponse(responseCode = "400" ,description = "La session n'a pas être créer", content = @Content(schema = @Schema(implementation = String.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "201",description = "La session à bien été créée")
+    @ApiResponse(responseCode = "400" ,description = "La session n'a pas pu être créer", content = @Content(schema = @Schema(implementation = String.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
     SessionResponse createSession(@RequestBody SessionCreationRequest request);
