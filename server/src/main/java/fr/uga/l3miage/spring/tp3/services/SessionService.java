@@ -44,7 +44,7 @@ public class SessionService {
             ecosSessionEntity.setStatus(SessionStatus.CREATED);
 
             return sessionMapper.toResponse(sessionComponent.createSession(ecosSessionEntity));
-        }catch (RuntimeException | ExamNotFoundException e){
+        } catch (RuntimeException | ExamNotFoundException e) {
             throw new CreationSessionRestException(e.getMessage());
         }
     }
