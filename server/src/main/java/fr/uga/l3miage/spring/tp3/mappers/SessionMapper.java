@@ -4,10 +4,12 @@ import fr.uga.l3miage.spring.tp3.models.EcosSessionEntity;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionProgrammationEntity;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionProgrammationStepEntity;
 import fr.uga.l3miage.spring.tp3.request.SessionCreationRequest;
+import fr.uga.l3miage.spring.tp3.request.SessionEndingRequest;
 import fr.uga.l3miage.spring.tp3.request.SessionProgrammationCreationRequest;
 import fr.uga.l3miage.spring.tp3.request.SessionProgrammationStepCreationRequest;
 import fr.uga.l3miage.spring.tp3.responses.EcosSessionProgrammationResponse;
 import fr.uga.l3miage.spring.tp3.responses.EcosSessionProgrammationStepResponse;
+import fr.uga.l3miage.spring.tp3.responses.SessionEndedResponse;
 import fr.uga.l3miage.spring.tp3.responses.SessionResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,9 +26,14 @@ public interface SessionMapper {
 
     EcosSessionProgrammationStepEntity toEntity(SessionProgrammationStepCreationRequest request);
 
+    EcosSessionEntity toEntity(SessionEndingRequest request);
+
     SessionResponse toResponse(EcosSessionEntity entity);
 
     EcosSessionProgrammationResponse toResponse(EcosSessionProgrammationEntity entity);
 
     EcosSessionProgrammationStepResponse toResponse(EcosSessionProgrammationStepEntity entity);
+
+    SessionEndedResponse toResponse1(EcosSessionEntity entity);
+
 }

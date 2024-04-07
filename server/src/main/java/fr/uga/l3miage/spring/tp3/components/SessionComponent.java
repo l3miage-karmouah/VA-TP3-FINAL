@@ -1,5 +1,7 @@
 package fr.uga.l3miage.spring.tp3.components;
 
+import fr.uga.l3miage.spring.tp3.enums.SessionStatus;
+import fr.uga.l3miage.spring.tp3.exceptions.technical.SessionNotStartedException;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionEntity;
 import fr.uga.l3miage.spring.tp3.repositories.EcosSessionProgrammationRepository;
 import fr.uga.l3miage.spring.tp3.repositories.EcosSessionProgrammationStepRepository;
@@ -19,5 +21,14 @@ public class SessionComponent {
         ecosSessionProgrammationStepRepository.saveAll(entity.getEcosSessionProgrammationEntity().getEcosSessionProgrammationStepEntities());
         ecosSessionProgrammationRepository.save(entity.getEcosSessionProgrammationEntity());
         return ecosSessionRepository.save(entity);
+    }
+
+    public EcosSessionEntity endSession(EcosSessionEntity entity) throws SessionNotStartedException {
+        if (entity.getStatus()!=SessionStatus.EVAL_ENDED){
+            throw new SessionNotStartedException("Mauvais état de session (should be EVAL_STARTED");
+        } else {
+            entity.setStatus(SessionStatus.EVAL_ENDED);
+            return ecosSessionRepository.save(entity);
+        }
     }
 }

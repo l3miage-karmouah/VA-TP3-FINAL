@@ -4,13 +4,17 @@ import fr.uga.l3miage.spring.tp3.components.ExamComponent;
 import fr.uga.l3miage.spring.tp3.components.SessionComponent;
 import fr.uga.l3miage.spring.tp3.enums.SessionStatus;
 import fr.uga.l3miage.spring.tp3.exceptions.rest.CreationSessionRestException;
+import fr.uga.l3miage.spring.tp3.exceptions.rest.SessionNotStartedRestException;
 import fr.uga.l3miage.spring.tp3.exceptions.technical.ExamNotFoundException;
+import fr.uga.l3miage.spring.tp3.exceptions.technical.SessionNotStartedException;
 import fr.uga.l3miage.spring.tp3.mappers.SessionMapper;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionEntity;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionProgrammationEntity;
 import fr.uga.l3miage.spring.tp3.models.EcosSessionProgrammationStepEntity;
 import fr.uga.l3miage.spring.tp3.models.ExamEntity;
 import fr.uga.l3miage.spring.tp3.request.SessionCreationRequest;
+import fr.uga.l3miage.spring.tp3.request.SessionEndingRequest;
+import fr.uga.l3miage.spring.tp3.responses.SessionEndedResponse;
 import fr.uga.l3miage.spring.tp3.responses.SessionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +50,16 @@ public class SessionService {
             return sessionMapper.toResponse(sessionComponent.createSession(ecosSessionEntity));
         } catch (RuntimeException | ExamNotFoundException e) {
             throw new CreationSessionRestException(e.getMessage());
+        }
+    }
+
+
+    public SessionEndedResponse endSession(SessionEndingRequest sessionEndingRequest) throws SessionNotStartedRestException {
+        try{
+            EcosSessionEntity entity = sessionMapper.toEntity(sessionEndingRequest);
+            return sessionMapper.toResponse1(sessionComponent.endSession(entity));
+        } catch (RuntimeException | SessionNotStartedException e){
+            throw new SessionNotStartedRestException(e.getMessage());
         }
     }
 }

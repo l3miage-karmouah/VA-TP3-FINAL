@@ -4,7 +4,9 @@ import fr.uga.l3miage.spring.tp3.exceptions.rest.CandidateNotFoundRestException;
 import fr.uga.l3miage.spring.tp3.models.CandidateEntity;
 import fr.uga.l3miage.spring.tp3.models.CandidateEvaluationGridEntity;
 import fr.uga.l3miage.spring.tp3.models.ExamEntity;
+import fr.uga.l3miage.spring.tp3.repositories.CandidateEvaluationGridRepository;
 import fr.uga.l3miage.spring.tp3.repositories.CandidateRepository;
+import fr.uga.l3miage.spring.tp3.repositories.ExamRepository;
 import fr.uga.l3miage.spring.tp3.responses.CandidateResponse;
 import fr.uga.l3miage.spring.tp3.services.CandidateService;
 import org.junit.jupiter.api.AfterEach;
@@ -32,48 +34,62 @@ public class CandidateControllerTest {
     private TestRestTemplate testRestTemplate;
     @Autowired
     private CandidateRepository candidateRepository;
+    @Autowired
+    private CandidateEvaluationGridRepository candidateEvaluationGridRepository;
+    @Autowired
+    private ExamRepository examRepository;
 
 
-    @AfterEach
-    public void clear() {
+    @BeforeEach
+    void clear(){
         candidateRepository.deleteAll();
+        examRepository.deleteAll();
+        candidateEvaluationGridRepository.deleteAll();
     }
 
     @Test
     void testGetAverageCandidateFound(){
         //GIVEN
         final HttpHeaders headers = new HttpHeaders();
-        //when(candidateService.getCandidateAverage(12L)).thenReturn(13.32);
         //GIVEN
-        // création des exams
-        ExamEntity examEntity1 = ExamEntity.builder().weight(2).build();
-        ExamEntity examEntity2 = ExamEntity.builder().weight(1).build();
-        ExamEntity examEntity3 = ExamEntity.builder().weight(4).build();
-        // création des grilles d'évaluation
-        CandidateEvaluationGridEntity candidateEvaluationGrid1 = CandidateEvaluationGridEntity
-                .builder()
-                .grade(12)
-                .examEntity(examEntity1)
-                .build();
-        CandidateEvaluationGridEntity candidateEvaluationGrid2 = CandidateEvaluationGridEntity
-                .builder()
-                .grade(14)
-                .examEntity(examEntity2)
-                .build();
-        CandidateEvaluationGridEntity candidateEvaluationGrid3 = CandidateEvaluationGridEntity
-                .builder()
-                .grade(11)
-                .examEntity(examEntity3)
-                .build();
         // création du candidat
         CandidateEntity candidateEntity = CandidateEntity
                 .builder()
                 .id(27L)
                 .email("manal.ifegh@gmail.com")
-                .candidateEvaluationGridEntities(Set.of(candidateEvaluationGrid1, candidateEvaluationGrid2, candidateEvaluationGrid3))
                 .build();
-
         candidateRepository.save(candidateEntity);
+        // création des exams
+        ExamEntity examEntity1 = ExamEntity.builder().weight(2).build();
+        ExamEntity examEntity2 = ExamEntity.builder().weight(1).build();
+        ExamEntity examEntity3 = ExamEntity.builder().weight(4).build();
+        examRepository.save(examEntity1);
+        examRepository.save(examEntity2);
+        examRepository.save(examEntity3);
+
+        // création des grilles d'évaluation
+        CandidateEvaluationGridEntity candidateEvaluationGrid1 = CandidateEvaluationGridEntity
+                .builder()
+                .grade(12)
+                .examEntity(examEntity1)
+                .candidateEntity(candidateEntity)
+                .build();
+        candidateEvaluationGridRepository.save(candidateEvaluationGrid1);
+        CandidateEvaluationGridEntity candidateEvaluationGrid2 = CandidateEvaluationGridEntity
+                .builder()
+                .grade(14)
+                .examEntity(examEntity2)
+                .candidateEntity(candidateEntity)
+                .build();
+        candidateEvaluationGridRepository.save(candidateEvaluationGrid2);
+        CandidateEvaluationGridEntity candidateEvaluationGrid3 = CandidateEvaluationGridEntity
+                .builder()
+                .grade(11)
+                .examEntity(examEntity3)
+                .candidateEntity(candidateEntity)
+                .build();
+        candidateEvaluationGridRepository.save(candidateEvaluationGrid3);
+
 
         //WHEN
         ResponseEntity<CandidateResponse> response = testRestTemplate.exchange("/api/candidates/27/average", HttpMethod.GET, new HttpEntity<>(null, headers), CandidateResponse.class);
